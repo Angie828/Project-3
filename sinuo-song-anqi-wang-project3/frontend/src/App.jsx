@@ -1,23 +1,24 @@
 import { useState } from 'react'
 import axios from 'axios'
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 
 import HomePage from './HomePage';
 import Navbar from './Navbar';
-import Pokemons from './Pokemons';
 import Login from './Login';
 import CreateUser from './CreateUser';
+import Profile from './Profile';
 
 function App() {
   return (
-    <div>
-    <Navbar/>
+    <BrowserRouter>
+      <Navbar/>
     <Routes>
       <Route path = "/" element = {<HomePage/>}/>
       <Route path = "/login" element={<Login/>} />
-      <Route path = "/signup" element={<CreateUser/>} />
-      <Route path = "/getPokemons" element={<Pokemons/>} />
+      <Route path = "/register" element={<CreateUser/>} />
+      <Route path = "/profile/:username" element={<Profile/>} />
     </Routes>
-    </div>
+    </BrowserRouter>
   )
 }
 

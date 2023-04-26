@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+
 const users = require('./apis/user')
 const posts = require('./apis/post')
 const app = express();
@@ -19,6 +20,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
 
 
 app.use('/api/users/', users)

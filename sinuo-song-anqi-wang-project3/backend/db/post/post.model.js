@@ -9,7 +9,7 @@ function createPost(post, userId) {
 }
 
 function getAllPosts() {
-    return PostModel.find({}).exec();
+    return PostModel.find({}).populate("user").exec();
 }
 
 function updatePost(postId, post, userId) {
@@ -21,10 +21,9 @@ function deletePost(postId, userId) {
 }
 
 
-
 module.exports = {
     createPost,
     getAllPosts,
     updatePost,
-    deletePost,
+    deletePost
 }

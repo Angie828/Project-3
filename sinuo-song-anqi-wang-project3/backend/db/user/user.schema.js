@@ -16,8 +16,8 @@ const UserSchema = new Schema({
     dateJoined: {
         type: Date,
         default: Date.now
-    },
-}, { collection: 'users', toJSON: { virtuals: true } });
+    }
+}, { collection : 'users' , toJSON: { virtuals: true }});
 
 UserSchema.virtual('posts', {
     ref: 'posts',

@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 
 const UserSchema = require('./user.schema').UserSchema;
 
-const UserModel = mongoose.model("UserModel", UserSchema);
+const UserModel = mongoose.model("users", UserSchema);
 
 function createUser(user) {
     return UserModel.create(user);
@@ -19,7 +19,6 @@ function findUserByUsername(username) {
 function findUserById(id) {
     return UserModel.findById(id).exec();
 }
-
 
 module.exports = {
     createUser,

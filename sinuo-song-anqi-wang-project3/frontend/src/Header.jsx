@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import './style/Header.css';
+
+import './Header.css';
 import { Link } from 'react-router-dom';
-import Navbar from './Navbar';
 
 export default function Header() {
 
@@ -20,20 +20,17 @@ export default function Header() {
     }, []);
 
     async function logOutUser() {
+
         await axios.post('/api/users/logOut')
         setActiveUsername(null)
     }
 
     if(!activeUsername) {
-        return (
-            <div>
-                <Navbar/>
-            </div>
-            // <div className='header'>
-            //     <Link to="/login" >Click here to login</Link>
-            // </div>
-              
-        )
+
+        return (<div className='header'>
+            <Link to="/login" >Click here to login</Link>
+
+        </div>)
 
     }
 

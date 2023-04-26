@@ -10,8 +10,8 @@ router.post('/', findUserByToken, async function (req, res) {
     const newPostResponse = await PostModel.createPost(body, req.user._id)
 
     res.json(newPostResponse);
-}
-)
+
+})
 
 router.put('/:postId', findUserByToken, async function (req, res) {
     const postId = req.params.postId;
@@ -52,4 +52,5 @@ router.delete('/:postId', findUserByToken, async function (req, res) {
     }
 });
 
-module.exports = router;
+
+module.exports = router

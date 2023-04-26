@@ -5,12 +5,6 @@ const jwt = require('jsonwebtoken')
 const UserModel = require('../db/user/user.model');
 const { findUserByToken } = require('./middleware');
 
-const userDB = [];
-
-router.get('/', function (request, response) {
-    response.send(userDB);
-})
-
 router.post('/', async function (request, response) {
     const body = request.body;
 
@@ -22,45 +16,52 @@ router.post('/', async function (request, response) {
 router.post('/login', async function (req, res) {
     const username = req.body.username;
     const password = req.body.password;
-
     try {
-        const attemptLoginResponse = await UserModel.attemptLogin(username, password);
+        const createUserResponse = await UserModel.attemptLogin(username, password)
 
-        if (!attemptLoginResponse) {
-            return res.status(401).send(null);
+        if (!createUserResponse) {
+            return res.status(403).send("Invalid password")
         }
 
-        const token = jwt.sign({ id: attemptLoginResponse._id }, "HUNTERS_PASSWORD")
-
+        const token = jwt.sign({ id: createUserResponse._id }, "HUNTERS_PASSWORD")
         res.cookie("token", token);
-
         return res.send("User logged in successfully")
 
     } catch (e) {
-        console.log(e);
-        res.status(500).send(null);
+        res.status(401).send(null);
     }
 })
 
-router.post('/create', async function (req, res) {
+router.post('/register', async function (req, res) {
     const username = req.body.username;
     const password = req.body.password;
 
-    const createUserResponse = await UserModel.createUser({ username: username, password: password })
+    try {
+        if (!username || !password) {
+            return res.status(409).send("Missing username or password")
+        }
 
-    const token = jwt.sign({ id: createUserResponse._id }, "HUNTERS_PASSWORD")
+        const createUserResponse = await UserModel.createUser({ username: username, password: password });
 
-    res.cookie("token", token);
+        const token = jwt.sign({ id: createUserResponse._id }, "HUNTERS_PASSWORD")
 
-    return res.send("User created successfully")
+        res.cookie("token", token);
+
+        return res.send("User created successfully")
+
+    } catch (e) {
+        res.status(401).send("Error: username already exists");
+    }
 })
 
 router.get('/isLoggedIn', findUserByToken, async function (req, res) {
+
     const user = req.user;
     if (!user) {
         return res.send({ username: null });
     }
     return res.send({ username: user.username })
+
 })
 
 router.post('/logOut', async function (req, res) {
@@ -70,6 +71,7 @@ router.post('/logOut', async function (req, res) {
     })
 
     res.send(true);
+
 });
 
 router.get('/lookup/:username', async function (req, res) {
@@ -82,11 +84,10 @@ router.get('/lookup/:username', async function (req, res) {
 })
 
 router.put('/update', findUserByToken, async function (req, res) {
-    req.user.bio = req.body.bio;
-    await req.user.save();
-    return res.send(req.user);
+    req.username.bio = req.body.bio;
+    await req.username.save();
+    return res.send(req.username);
 })
-
 
 
 module.exports = router
