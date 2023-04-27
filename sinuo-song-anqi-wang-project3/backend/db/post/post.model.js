@@ -9,11 +9,12 @@ function createPost(post, userId) {
 }
 
 function getAllPosts() {
-    return PostModel.find({}).populate("user").exec();
+    return PostModel.find({}).populate("user").sort({ datePosted: 'desc' }).exec();
 }
 
 function updatePost(postId, post, userId) {
-    return PostModel.findOneAndUpdate({ _id: postId, user: userId }, post, { new: true }).exec();
+    const updatedPost = { ...post, datePosted: new Date() };
+    return PostModel.findOneAndUpdate({ _id: postId, user: userId }, updatedPost, { new: true }).exec();
 }
 
 function deletePost(postId, userId) {
